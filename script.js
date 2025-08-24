@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlayContainer = document.getElementById('overlay-container');
 
     // Nastavitve igre
-    let playerSpeed = 1; // SPREMEMBA: Zmanjšano z 10 na 2 za lažje upravljanje
+    let playerSpeed = 1; // SPREMEMBA: Zmanjšano z 10 na 1 za lažje upravljanje
     let sackCapacity = 5;
     const GAME_WIDTH = gameContainer.clientWidth;
     const GAME_HEIGHT = gameContainer.clientHeight;
