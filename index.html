@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pobiranje Smeti - Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Igra Pobiranja Smeti</h1>
+
+    <div id="game-container">
+        <div id="player"></div>
+        <div id="incinerator"></div>
+        </div>
+
+    <div id="ui-container">
+        <p>Vreča: <span id="sack-status">0/5</span></p>
+        <p>Točke: <span id="score">0</span></p>
+        <p>Jezički: <span id="tab-count">0</span></p>
+    </div>
+    
+    <p id="message-log"></p>
+
+    <div id="icon-bar">
+        <button id="open-upgrades-btn">🔧</button>
+    </div>
+
+    <div id="overlay-container">
+        <div id="upgrade-panel">
+            <button id="close-upgrades-btn">&times;</button>
+            <h3>Nadgradnje</h3>
+            <button id="upgrade-sack">
+                Povečaj vrečo (Cena: <span id="cost-sack">10</span> točk)
+            </button>
+            <button id="upgrade-speed">
+                Povečaj hitrost (Cena: <span id="cost-speed">25</span> točk)
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
