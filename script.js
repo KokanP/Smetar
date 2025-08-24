@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlayContainer = document.getElementById('overlay-container');
 
     // Nastavitve igre
-    let playerSpeed = 10;
+    let playerSpeed = 2; // SPREMEMBA: Zmanjšano z 10 na 2 za lažje upravljanje
     let sackCapacity = 5;
     const GAME_WIDTH = gameContainer.clientWidth;
     const GAME_HEIGHT = gameContainer.clientHeight;
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stanje nadgradenj
     let upgrades = {
         sack: { level: 1, cost: 10, increase: 5 },
-        speed: { level: 1, cost: 25, increase: 2 }
+        speed: { level: 1, cost: 25, increase: 1 } // SPREMEMBA: Povečanje zmanjšano na 1
     };
 
     // Stanje igre
@@ -47,14 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
         
-        // Začnemo z neprekinjenim premikanjem
         if (movementInterval) clearInterval(movementInterval);
         movementInterval = setInterval(gameLoop, 16); // ~60 FPS
     }
 
     function handleTouchMove(e) {
         if (isPaused || !e.touches.length) return;
-        e.preventDefault(); // Prepreči scrollanje strani
+        e.preventDefault(); 
         
         let currentX = e.touches[0].clientX;
         let currentY = e.touches[0].clientY;
@@ -62,24 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let diffX = currentX - touchStartX;
         let diffY = currentY - touchStartY;
 
-        // Preverimo mrtvo cono
         if (Math.sqrt(diffX*diffX + diffY*diffY) < DEAD_ZONE) {
             currentDirection = { x: 0, y: 0 };
             return;
         }
 
-        // Določimo smer
         if (Math.abs(diffX) > Math.abs(diffY)) {
-            // Horizontalno gibanje
             currentDirection = { x: Math.sign(diffX), y: 0 };
         } else {
-            // Vertikalno gibanje
             currentDirection = { x: 0, y: Math.sign(diffY) };
         }
     }
 
     function handleTouchEnd(e) {
-        // Ustavimo premikanje
         clearInterval(movementInterval);
         movementInterval = null;
         currentDirection = { x: 0, y: 0 };
@@ -93,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function gameLoop() {
         if (isPaused) return;
         
-        // Premakni igralca, če je smer določena
         if (currentDirection.x !== 0 || currentDirection.y !== 0) {
             movePlayer(currentDirection.x * playerSpeed, currentDirection.y * playerSpeed);
         }
@@ -150,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buyUpgrade(type) {
-        let upgrade, currency, cost;
+        let upgrade;
         if (type === 'sack') { upgrade = upgrades.sack; } 
         else if (type === 'speed') { upgrade = upgrades.speed; }
 
@@ -175,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeUpgradesMenu() {
         overlayContainer.classList.remove('visible');
         isPaused = false;
-        // Če je igralec držal prst med pavzo, preprečimo takojšnje nadaljevanje gibanja
         handleTouchEnd(); 
     }
     openUpgradesBtn.addEventListener('click', openUpgradesMenu);
