@@ -14,9 +14,11 @@ body {
     font-family: 'Bangers', cursive;
 }
 
+/* --- SUGGESTED CHANGE: Use 100dvh for mobile (with fallback) --- */
 #game-container {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100dvh; /* Dynamic viewport height for modern browsers */
+    min-height: 100vh; /* Fallback for older browsers */
     background-color: #8FBC8F;
     position: relative;
     overflow: hidden;
@@ -160,8 +162,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100dvh; /* SUGGESTED: use dynamic viewport height for overlays too */
+    min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;

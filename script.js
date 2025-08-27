@@ -1,3 +1,32 @@
+// --- Added section for proper mobile height handling ---
+function setGameContainerHeight() {
+    // Set the real height based on visible viewport
+    document.getElementById('game-container').style.height = window.innerHeight + 'px';
+}
+
+// --- Variables for screen width/height (not const anymore) ---
+let SCREEN_WIDTH = 0;
+let SCREEN_HEIGHT = 0;
+
+function updateScreenSizeVars() {
+    const gameContainer = document.getElementById('game-container');
+    SCREEN_WIDTH = gameContainer.clientWidth;
+    SCREEN_HEIGHT = gameContainer.clientHeight;
+}
+
+// Handles both height setting and variable updating, and updates camera/player visuals
+function handleResize() {
+    setGameContainerHeight();
+    updateScreenSizeVars();
+    if (typeof updateCamera === 'function') updateCamera();
+    if (typeof updatePlayerVisuals === 'function') updatePlayerVisuals();
+}
+
+// --- Attach resize/orientationchange listeners and on DOMContentLoaded ---
+window.addEventListener('resize', handleResize);
+window.addEventListener('orientationchange', handleResize);
+document.addEventListener('DOMContentLoaded', handleResize);
+
 document.addEventListener('DOMContentLoaded', () => {
     // Referenčni elementi
     const gameContainer = document.getElementById('game-container');
@@ -19,8 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Nastavitve igre
     let playerSpeed = 3;
     let sackCapacity = 5;
-    const SCREEN_WIDTH = gameContainer.clientWidth;
-    const SCREEN_HEIGHT = gameContainer.clientHeight;
+
+    // --- USE global SCREEN_WIDTH/SCREEN_HEIGHT variables ---
+    // SCREEN_WIDTH and SCREEN_HEIGHT are now dynamic and updated by handleResize
 
     // Vse vrste smeti, vključno z novimi
     const TRASH_TYPES = ['casopis', 'detergent', 'fizol', 'kozarec', 'mehcalec', 'pivo', 'pixna', 'pizza', 'plastenka', 'skatla', 'skodelica', 'sprej', 'starbucks', 'steklenica', 'tuna', 'vrecka'];
@@ -90,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playerPos.y = Math.max(0, Math.min(newY, mapSize.height - player.clientHeight));
     }
     
+    // --- updateCamera uses global SCREEN_WIDTH/SCREEN_HEIGHT ---
     function updateCamera() {
         // Izboljšan izračun kamere, ki igralca centrira in preprečuje, da bi šel izven zaslona
         let targetX = playerPos.x - SCREEN_WIDTH / 2;
@@ -129,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
+    // --- loadLevel uses dynamic SCREEN_WIDTH/SCREEN_HEIGHT ---
     function loadLevel(levelName) {
         const levelData = levels[levelName];
         
@@ -184,6 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function init() {
+        // --- Ensure screen vars are updated before level load ---
+        updateScreenSizeVars();
         loadLevel("visok_park");
         updateCamera();
         updatePlayerVisuals();
@@ -273,6 +306,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     openUpgradesBtn.addEventListener('click', openUpgradesMenu);
     closeUpgradesBtn.addEventListener('click', closeUpgradesMenu);
+
+    // --- Listen for resize inside the game as well to keep map/camera in sync ---
+    window.addEventListener('resize', () => {
+        updateScreenSizeVars();
+        updateCamera();
+        updatePlayerVisuals();
+    });
+    window.addEventListener('orientationchange', () => {
+        updateScreenSizeVars();
+        updateCamera();
+        updatePlayerVisuals();
+    });
 
     init();
 });
