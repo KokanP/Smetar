@@ -25,85 +25,46 @@ body {
 
 #map {
     position: absolute;
-    /* Dodano ozadje trave */
-    background-image: url("./grafika/zemljevidi/trava1.png");
-    background-repeat: repeat;
-    background-size: 50px 50px; /* Prilagodite velikost, če je potrebno */
+    background-color: #8FBC8F;
     transform-origin: top left;
     transition: transform 0.1s linear; 
 }
 
 #player {
-    width: 32px; /* Povečana velikost za boljšo vidljivost ikone */
-    height: 32px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    width: 20px;
+    height: 20px;
+    background-color: #4682B4;
+    border-radius: 50%;
     position: absolute;
     z-index: 10;
-    transition: background-image 0.1s ease-in-out;
-}
-
-#player.left {
-    background-image: url("./grafika/igralec/pujsek_levo.png");
-}
-
-#player.right {
-    background-image: url("./grafika/igralec/pujsek_desno.png");
 }
 
 .trash {
-    width: 24px; /* Povečana velikost smeti */
-    height: 24px;
+    width: 15px;
+    height: 15px;
     position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    border: 1px solid rgba(0,0,0,0.5);
     z-index: 5;
 }
 
-/* Preimenovano scenery v bush1, kot ste zahtevali */
-.bush1 {
+.scenery {
     position: absolute;
     width: 25px;
     height: 25px;
-    /* Posodobljeno na sliko grmička */
-    background-image: url("./grafika/predmeti/grmicek1.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 0; /* Odstrani zaokrožitev, ker ni več krog */
+    background-color: #006400;
+    border-radius: 50%;
     z-index: 1;
 }
 
-/* Stil za vsako vrsto smeti, ki uporablja sliko */
-.casopis { background-image: url("./grafika/smeti/casopis.png"); }
-.detergent { background-image: url("./grafika/smeti/detergent.png"); }
-.fizol { background-image: url("./grafika/smeti/fizol.png"); }
-.kozarec { background-image: url("./grafika/smeti/kozarec.png"); }
-.mehcalec { background-image: url("./grafika/smeti/mehcalec.png"); }
-.pivo { background-image: url("./grafika/smeti/pivo.png"); }
-.pixna { background-image: url("./grafika/smeti/pixna.png"); }
-.pizza { background-image: url("./grafika/smeti/pizza.png"); }
-.plastenka { background-image: url("./grafika/smeti/plastenka.png"); }
-.skatla { background-image: url("./grafika/smeti/skatla.png"); }
-.skodelica { background-image: url("./grafika/smeti/skodelica.png"); }
-.sprej { background-image: url("./grafika/smeti/sprej.png"); }
-.starbucks { background-image: url("./grafika/smeti/starbucks.png"); }
-.steklenica { background-image: url("./grafika/smeti/steklenica.png"); }
-.tuna { background-image: url("./grafika/smeti/tuna.png"); }
-.vrecka { background-image: url("./grafika/smeti/vrecka.png"); }
+.papir { background-color: #FFFFFF; }
+.plastika { background-color: #FFFF00; }
+.piksna { background-color: #C0C0C0; border-radius: 50%; }
 
 #incinerator {
     width: 40px;
     height: 40px;
-    /* Posodobljeno na sliko sežigalnice */
-    background-image: url("./grafika/predmeti/sezigalnica.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none; /* Odstrani obrobo, ker ni več krog */
-    border-radius: 0; /* Odstrani zaokrožitev */
+    background-color: #DC143C;
+    border: 2px solid #000;
     position: absolute;
     z-index: 2;
 }

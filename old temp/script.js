@@ -22,29 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const SCREEN_WIDTH = gameContainer.clientWidth;
     const SCREEN_HEIGHT = gameContainer.clientHeight;
 
-    // Vse vrste smeti, vključno z novimi
-    const TRASH_TYPES = ['casopis', 'detergent', 'fizol', 'kozarec', 'mehcalec', 'pivo', 'pixna', 'pizza', 'plastenka', 'skatla', 'skodelica', 'sprej', 'starbucks', 'steklenica', 'tuna', 'vrecka'];
-    
-    // Točkovanje za vsako vrsto smeti
-    const TRASH_SCORES = {
-        'casopis': 1,
-        'detergent': 2,
-        'fizol': 3,
-        'kozarec': 2,
-        'mehcalec': 2,
-        'pivo': 5,
-        'pixna': 5, // Pixna daje tudi jeziček, kar je poseben primer
-        'pizza': 1,
-        'plastenka': 2,
-        'skatla': 1,
-        'skodelica': 1,
-        'sprej': 3,
-        'starbucks': 3,
-        'steklenica': 3,
-        'tuna': 3,
-        'vrecka': 1
-    };
-
     const levels = {
         "visok_park": { mapWidthMultiplier: 1, mapHeightMultiplier: 3, trashCount: 30, sceneryCount: 40 },
         "sirok_park": { mapWidthMultiplier: 3, mapHeightMultiplier: 1, trashCount: 30, sceneryCount: 40 }
@@ -63,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let tabCount = 0;
     let isPaused = false;
-    let lastDirection = 'right'; // Začetna smer
 
     let touchStartX = 0, touchStartY = 0;
     let currentDirection = { x: 0, y: 0 };
@@ -79,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateCamera();
         updatePlayerVisuals();
-        updatePlayerDirection(); // Posodobitev smeri
         afterMove();
     }
 
@@ -103,29 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         player.style.top = playerPos.y + 'px';
     }
 
-    // Funkcija za posodabljanje smeri igralca
-    function updatePlayerDirection() {
-        if (currentDirection.x > 0) {
-            player.classList.remove('left');
-            player.classList.add('right');
-            lastDirection = 'right';
-        } else if (currentDirection.x < 0) {
-            player.classList.remove('right');
-            player.classList.add('left');
-            lastDirection = 'left';
-        } else {
-            // Če igralec stoji ali se premika gor/dol, obdrži zadnjo smer
-            if (lastDirection === 'left') {
-                player.classList.remove('right');
-                player.classList.add('left');
-            } else {
-                player.classList.remove('left');
-                player.classList.add('right');
-            }
-        }
-    }
-
-
     function loadLevel(levelName) {
         const levelData = levels[levelName];
         
@@ -140,17 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
         incinerator.style.left = (mapSize.width - 50) + 'px';
         incinerator.style.top = (mapSize.height - 50) + 'px';
 
-        // Spremenimo klic funkcije, da uporablja novi razred "bush1"
-        createScenery(levelData.sceneryCount, 'bush1');
+        createScenery(levelData.sceneryCount);
         createTrash(levelData.trashCount);
         
         updateUI();
     }
     
-    function createScenery(count, className) {
+    function createScenery(count) {
         for (let i = 0; i < count; i++) {
             const sceneryEl = document.createElement('div');
-            sceneryEl.className = className;
+            sceneryEl.className = 'scenery';
             const sPos = {
                 x: Math.floor(Math.random() * mapSize.width),
                 y: Math.floor(Math.random() * mapSize.height)
@@ -162,10 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createTrash(count) {
+        const TRASH_TYPES = ['papir', 'plastika', 'piksna'];
         for (let i = 0; i < count; i++) {
             const el = document.createElement('div');
             el.className = 'trash';
-            // Izbira med vsemi novimi vrstami smeti
             const type = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
             el.classList.add(type);
             const pos = { 
@@ -183,8 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadLevel("visok_park");
         updateCamera();
         updatePlayerVisuals();
-        // Dodana začetna smer, da je igralec viden ob zagonu
-        player.classList.add('right');
     }
     
     // SPREMEMBA NAZAJ NA PRAVILNO LOGIKO
@@ -194,9 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // POPRAVEK: Dodano preverjanje, če je prostor v vreči
                 if (sackContent < sackCapacity) {
                     sackContent++;
-                    // Prištejemo točke glede na vrsto smeti
-                    score += TRASH_SCORES[trashItem.type];
-                    if (trashItem.type === 'pixna') {
+                    if (trashItem.type === 'piksna') {
                         tabCount++;
                         logMessage("Pobral si piksno in jeziček!");
                     } else {
@@ -214,8 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (checkCollision(player, incinerator)) {
             if (sackContent > 0) {
-                // Točke se prištejejo že ob pobiranju, tako da jih tukaj ne dodajamo
-                logMessage(`Izpraznil si vrečo!`);
+                score += sackContent;
+                logMessage(`Izpraznil si vrečo za ${sackContent} točk!`);
                 sackContent = 0;
             }
         }
