@@ -91,10 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function updateCamera() {
+        // Izboljšan izračun kamere, ki igralca centrira in preprečuje, da bi šel izven zaslona
         let targetX = playerPos.x - SCREEN_WIDTH / 2;
         let targetY = playerPos.y - SCREEN_HEIGHT / 2;
+        
+        // Prilagodimo, da se kamera ne premika izven roba mape
         cameraOffset.x = Math.max(0, Math.min(targetX, mapSize.width - SCREEN_WIDTH));
         cameraOffset.y = Math.max(0, Math.min(targetY, mapSize.height - SCREEN_HEIGHT));
+        
         map.style.transform = `translate(-${cameraOffset.x}px, -${cameraOffset.y}px)`;
     }
 
